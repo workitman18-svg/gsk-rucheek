@@ -19,9 +19,6 @@
       --warning-bg: #fffbeb;
       --warning-border: #f59e0b;
       --warning-text: #92400e;
-      --admin-bg: #fef2f2;
-      --admin-border: #ef4444;
-      --admin-text: #991b1b;
     }
 
     * {
@@ -38,7 +35,6 @@
       line-height: 1.5;
     }
 
-    /* Верхняя панель навигации / входа */
     .top-bar {
       max-width: 960px;
       margin: 0 auto 16px auto;
@@ -61,7 +57,6 @@
     }
     .btn-admin-login:hover { background: #1e293b; }
 
-    /* Панель инструментов админа */
     .admin-panel {
       display: none;
       max-width: 960px;
@@ -108,7 +103,6 @@
     .btn-admin-logout { background: #ef4444; color: white; }
     .btn-admin-logout:hover { background: #dc2626; }
 
-    /* Визуальное выделение редактируемых полей */
     .editable-field.edit-active {
       outline: 2px dashed #3b82f6;
       background-color: #eff6ff;
@@ -317,7 +311,6 @@
       cursor: not-allowed;
     }
 
-    /* Модальное окно авторизации */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -383,14 +376,12 @@
 </head>
 <body>
 
-<!-- Кнопка вызова админ-панели -->
 <div class="top-bar">
   <button id="adminLoginBtn" class="btn-admin-login">
     ⚙ Вход для администратора
   </button>
 </div>
 
-<!-- Панель управления администратора -->
 <div id="adminPanel" class="admin-panel">
   <div class="admin-status">Режим администратора активен: кликните на текст для редактирования</div>
   <div class="admin-actions">
@@ -404,28 +395,27 @@
   <header class="doc-header">
     <h1>Лист голосования</h1>
     <p class="meta-info" style="text-align: center; font-weight: 600;">
-      РЕШЕНИЕ члена гаражно-строительного кооператива «Ручеёк»[cite: 1, 2]
+      РЕШЕНИЕ члена гаражно-строительного кооператива «Ручеёк»
     </p>
     <p class="meta-info">
       для голосования по вопросам повестки очередного Общего собрания членов гаражно-строительного кооператива «Ручеёк», расположенного по адресу: 
-      <strong class="editable-field" data-key="header-address">Московская область, город Домодедово, улица Шевченко, 10</strong>[cite: 1, 2].
+      <strong class="editable-field" data-key="header-address">Московская область, город Домодедово, улица Шевченко, 10</strong>.
     </p>
     <p class="meta-info">
       <strong>Инициаторы собрания:</strong> Председатель Правления ГСК «Ручеёк» 
-      <span class="editable-field" data-key="header-initiator">Боговик Егор Васильевич</span>[cite: 1, 2].
+      <span class="editable-field" data-key="header-initiator">Боговик Егор Васильевич</span>.
     </p>
     
     <div class="meta-highlight">
-      • <strong>Очное собрание:</strong> в 10:00 часов по адресу: <span class="editable-field" data-key="header-meeting-place">Московская область, г. Домодедово, ул. Шевченко, 10, территория ГСК «Ручеёк»</span>[cite: 1, 2].<br>
-      • <strong>Заочное голосование:</strong> с использованием интернет-ресурсов[cite: 1, 2]. Повторное голосование с одного устройства заблокировано.
+      • <strong>Очное собрание:</strong> в 10:00 часов по адресу: <span class="editable-field" data-key="header-meeting-place">Московская область, г. Домодедово, ул. Шевченко, 10, территория ГСК «Ручеёк»</span>.<br>
+      • <strong>Заочное голосование:</strong> с использованием интернет-ресурсов. Повторное голосование с одного устройства заблокировано.
     </div>
 
     <p style="font-size: 13px; color: var(--text-muted); font-style: italic;">
-      Нужный вариант ответа отметьте в одной из граф («ЗА», «ПРОТИВ», «ВОЗДЕРЖАЛСЯ») по каждому вопросу[cite: 1, 2].
+      Нужный вариант ответа отметьте в одной из граф («ЗА», «ПРОТИВ», «ВОЗДЕРЖАЛСЯ») по каждому вопросу.
     </p>
   </header>
 
-  <!-- Уведомления об ограничении -->
   <div id="alreadyVotedAlert" class="status-alert already-voted">
     <strong>Голосование с данного устройства уже завершено.</strong><br>
     <span id="voteDateNotice"></span> Повторная подача бюллетеня не допускается.
@@ -438,41 +428,39 @@
   <form id="voteForm">
     <input type="hidden" id="deviceId" name="deviceId" value="">
 
-    <!-- Сведения об участнике -->
     <div class="user-info-section">
-      <div class="section-title">Сведения о члене ГСК «Ручеёк»[cite: 1, 2]</div>
+      <div class="section-title">Сведения о члене ГСК «Ручеёк»</div>
       <div class="form-group">
-        <label for="fio">Фамилия, имя, отчество члена ГСК *[cite: 1, 2]</label>
+        <label for="fio">Фамилия, имя, отчество члена ГСК *</label>
         <input type="text" id="fio" name="fio" placeholder="Например: Иванов Иван Иванович" required>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label for="garage_num">№ гаража (бокса/места) *[cite: 1, 2]</label>
+          <label for="garage_num">№ гаража (бокса/места) *</label>
           <input type="text" id="garage_num" name="garage_num" placeholder="Например: 42" required>
         </div>
         <div class="form-group">
-          <label for="vote_count">Количество голосов *[cite: 1, 2]</label>
+          <label for="vote_count">Количество голосов *</label>
           <input type="number" id="vote_count" name="vote_count" value="1" min="1" required>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="phone">Контактный телефон *[cite: 1, 2]</label>
+        <label for="phone">Контактный телефон *</label>
         <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
       </div>
     </div>
 
-    <!-- Таблица повестки дня со всеми 10 пунктами -->
     <div class="table-responsive">
       <table class="vote-table">
         <thead>
           <tr>
-            <th class="col-num">№ п/п[cite: 1, 2]</th>
-            <th class="col-title">По повестке Общего собрания[cite: 1, 2]</th>
-            <th class="col-opt">ЗА[cite: 1, 2]</th>
-            <th class="col-opt">ПРОТИВ[cite: 1, 2]</th>
-            <th class="col-opt">ВОЗДЕРЖАЛСЯ[cite: 1, 2]</th>
+            <th class="col-num">№ п/п</th>
+            <th class="col-title">По повестке Общего собрания</th>
+            <th class="col-opt">ЗА</th>
+            <th class="col-opt">ПРОТИВ</th>
+            <th class="col-opt">ВОЗДЕРЖАЛСЯ</th>
           </tr>
         </thead>
         <tbody>
@@ -481,13 +469,13 @@
           <tr>
             <td class="col-num">1</td>
             <td class="col-title">
-              В целях обеспечения проведения Общего собрания согласно Устава ГСК «Ручеёк» от 27.06.2012 года предлагается избрать[cite: 1, 2]:
+              В целях обеспечения проведения Общего собрания согласно Устава ГСК «Ручеёк» от 27.06.2012 года предлагается избрать:
               <ul class="sub-list">
-                <li><strong>Председателем Общего собрания:</strong> <span class="editable-field" data-key="q1-pres">Боговика Егора Васильевича</span>[cite: 1, 2]</li>
-                <li><strong>Секретарём Общего собрания:</strong> <span class="editable-field" data-key="q1-sec">Сергеева Николая Сергеевича</span>[cite: 1, 2]</li>
-                <li><strong>Членами счетной комиссии Общего собрания:</strong>[cite: 1, 2]
+                <li><strong>Председателем Общего собрания:</strong> <span class="editable-field" data-key="q1-pres">Боговика Егора Васильевича</span></li>
+                <li><strong>Секретарём Общего собрания:</strong> <span class="editable-field" data-key="q1-sec">Сергеева Николая Сергеевича</span></li>
+                <li><strong>Членами счетной комиссии Общего собрания:</strong>
                   1) <span class="editable-field" data-key="q1-sc1">Акчурина Марата Дамировича</span>, 
-                  2) <span class="editable-field" data-key="q1-sc2">Турчанинову Татьяну Александровну</span>[cite: 1, 2]
+                  2) <span class="editable-field" data-key="q1-sc2">Турчанинову Татьяну Александровну</span>
                 </li>
               </ul>
             </td>
@@ -500,10 +488,10 @@
           <tr>
             <td class="col-num">2</td>
             <td class="col-title">
-              Избрать членами Ревизионной комиссии ГСК «Ручеёк» с 01.12.2026 со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года[cite: 1, 2]:
+              Избрать членами Ревизионной комиссии ГСК «Ручеёк» с 01.12.2026 со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года:
               <ul class="sub-list">
-                <li><strong>Председателем Ревизионной комиссии ГСК «Ручеёк»:</strong> <span class="editable-field" data-key="q2-rev-chair">Акчурина Марата Дамировича</span>[cite: 1, 2]</li>
-                <li><strong>Членами Ревизионной комиссии ГСК «Ручеёк»:</strong> <span class="editable-field" data-key="q2-rev-m1">Турчанинову Татьяну Александровну</span>, <span class="editable-field" data-key="q2-rev-m2">Юмагулова Руслана Дамировича</span>[cite: 1, 2]</li>
+                <li><strong>Председателем Ревизионной комиссии ГСК «Ручеёк»:</strong> <span class="editable-field" data-key="q2-rev-chair">Акчурина Марата Дамировича</span></li>
+                <li><strong>Членами Ревизионной комиссии ГСК «Ручеёк»:</strong> <span class="editable-field" data-key="q2-rev-m1">Турчанинову Татьяну Александровну</span>, <span class="editable-field" data-key="q2-rev-m2">Юмагулова Руслана Дамировича</span></li>
               </ul>
             </td>
             <td class="col-opt"><label><input type="radio" name="q2" value="for" required> За</label></td>
@@ -515,7 +503,7 @@
           <tr>
             <td class="col-num">3</td>
             <td class="col-title">
-              Признать работу Председателя Правления ГСК «Ручеёк» <span class="editable-field" data-key="q3-chairman">Боговика Егора Васильевича</span> удовлетворительной и освободить от полномочий Председателя Правления ГСК «Ручеёк» с 01.12.2026 г.[cite: 1, 2]
+              Признать работу Председателя Правления ГСК «Ручеёк» <span class="editable-field" data-key="q3-chairman">Боговика Егора Васильевича</span> удовлетворительной и освободить от полномочий Председателя Правления ГСК «Ручеёк» с 01.12.2026 г.
             </td>
             <td class="col-opt"><label><input type="radio" name="q3" value="for" required> За</label></td>
             <td class="col-opt"><label><input type="radio" name="q3" value="against"> Против</label></td>
@@ -526,7 +514,7 @@
           <tr>
             <td class="col-num">4</td>
             <td class="col-title">
-              Избрать <span class="editable-field" data-key="q4-new-chair">Иванова Ивана Ивановича</span> Председателем Правления ГСК «Ручеёк» с 01.12.2026 г. со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года[cite: 1, 2].
+              Избрать <span class="editable-field" data-key="q4-new-chair">Иванова Ивана Ивановича</span> Председателем Правления ГСК «Ручеёк» с 01.12.2026 г. со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года.
             </td>
             <td class="col-opt"><label><input type="radio" name="q4" value="for" required> За</label></td>
             <td class="col-opt"><label><input type="radio" name="q4" value="against"> Против</label></td>
@@ -537,14 +525,14 @@
           <tr>
             <td class="col-num">5</td>
             <td class="col-title">
-              Избрать членами Правления ГСК «Ручеёк» с 01.12.2026 г. со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года в следующем составе[cite: 1, 2]:
+              Избрать членами Правления ГСК «Ручеёк» с 01.12.2026 г. со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года в следующем составе:
               <ol class="sub-list">
-                <li><span class="editable-field" data-key="q5-m1">Анпилогова Владимира Сергеевича</span>[cite: 1, 2]</li>
-                <li><span class="editable-field" data-key="q5-m2">Масляева Юрия Николаевича</span>[cite: 1, 2]</li>
-                <li><span class="editable-field" data-key="q5-m3">Матяшова Владимира Павловича</span>[cite: 1, 2]</li>
-                <li><span class="editable-field" data-key="q5-m4">Мохнаткина Валерия Борисовича</span>[cite: 1, 2]</li>
-                <li><span class="editable-field" data-key="q5-m5">Сергеева Николая Сергеевича</span>[cite: 1, 2]</li>
-                <li><span class="editable-field" data-key="q5-m6">Смирнова Евгения Егоровича</span>[cite: 1, 2]</li>
+                <li><span class="editable-field" data-key="q5-m1">Анпилогова Владимира Сергеевича</span></li>
+                <li><span class="editable-field" data-key="q5-m2">Масляева Юрия Николаевича</span></li>
+                <li><span class="editable-field" data-key="q5-m3">Матяшова Владимира Павловича</span></li>
+                <li><span class="editable-field" data-key="q5-m4">Мохнаткина Валерия Борисовича</span></li>
+                <li><span class="editable-field" data-key="q5-m5">Сергеева Николая Сергеевича</span></li>
+                <li><span class="editable-field" data-key="q5-m6">Смирнова Евгения Егоровича</span></li>
               </ol>
             </td>
             <td class="col-opt"><label><input type="radio" name="q5" value="for" required> За</label></td>
@@ -556,7 +544,7 @@
           <tr>
             <td class="col-num">6</td>
             <td class="col-title">
-              Утвердить сумму годового членского взноса в ГСК «Ручеёк» на период 2027 года в размере <strong class="editable-field" data-key="q6-sum">6000 рублей</strong> и сроком уплаты взноса до <span class="editable-field" data-key="q6-date">01.05.2027 г.</span>[cite: 1, 2]
+              Утвердить сумму годового членского взноса в ГСК «Ручеёк» на период 2027 года в размере <strong class="editable-field" data-key="q6-sum">6000 рублей</strong> и сроком уплаты взноса до <span class="editable-field" data-key="q6-date">01.05.2027 г.</span>
             </td>
             <td class="col-opt"><label><input type="radio" name="q6" value="for" required> За</label></td>
             <td class="col-opt"><label><input type="radio" name="q6" value="against"> Против</label></td>
@@ -567,7 +555,7 @@
           <tr>
             <td class="col-num">7</td>
             <td class="col-title">
-              Утвердить сумму вступительного членского взноса в ГСК «Ручеёк» на период 2027 года в размере <strong class="editable-field" data-key="q7-sum">10000 рублей</strong> с 01.01.2027 года и сроком уплаты не более 3-х дней с момента переоформления гаража путем совершения сделки по купле-продаже[cite: 1, 2].
+              Утвердить сумму вступительного членского взноса в ГСК «Ручеёк» на период 2027 года в размере <strong class="editable-field" data-key="q7-sum">10000 рублей</strong> с 01.01.2027 года и сроком уплаты не более 3-х дней с момента переоформления гаража путем совершения сделки по купле-продаже.
             </td>
             <td class="col-opt"><label><input type="radio" name="q7" value="for" required> За</label></td>
             <td class="col-opt"><label><input type="radio" name="q7" value="against"> Против</label></td>
@@ -578,7 +566,7 @@
           <tr>
             <td class="col-num">8</td>
             <td class="col-title">
-              Утвердить сумму целевого взноса для гаражей, которые используются для ведения коммерческой деятельности, в размере <strong class="editable-field" data-key="q8-sum">от 10000 до 20000 рублей</strong> на период 2027 года и сроком уплаты взноса до 01.03.2027 г. Размер взноса определять в индивидуальном порядке решением специальной комиссии из состава Правления ГСК[cite: 1, 2].
+              Утвердить сумму целевого взноса для гаражей, которые используются для ведения коммерческой деятельности, в размере <strong class="editable-field" data-key="q8-sum">от 10000 до 20000 рублей</strong> на период 2027 года и сроком уплаты взноса до 01.03.2027 г. Размер взноса определять в индивидуальном порядке решением специальной комиссии из состава Правления ГСК.
             </td>
             <td class="col-opt"><label><input type="radio" name="q8" value="for" required> За</label></td>
             <td class="col-opt"><label><input type="radio" name="q8" value="against"> Против</label></td>
@@ -589,7 +577,7 @@
           <tr>
             <td class="col-num">9</td>
             <td class="col-title">
-              Утвердить списочный состав членов ГСК «Ручеёк» по состоянию на <span class="editable-field" data-key="q9-date">01.11.2026 года</span> (с учётом принятия и исключения из состава членов ГСК «Ручеёк» лиц в период с 13.03.2023 по 01.11.2026 г.)[cite: 1, 2].
+              Утвердить списочный состав членов ГСК «Ручеёк» по состоянию на <span class="editable-field" data-key="q9-date">01.11.2026 года</span> (с учётом принятия и исключения из состава членов ГСК «Ручеёк» лиц в период с 13.03.2023 по 01.11.2026 г.).
             </td>
             <td class="col-opt"><label><input type="radio" name="q9" value="for" required> За</label></td>
             <td class="col-opt"><label><input type="radio" name="q9" value="against"> Против</label></td>
@@ -600,7 +588,7 @@
           <tr>
             <td class="col-num">10</td>
             <td class="col-title">
-              Утвердить с 01.11.2026 года пени за несвоевременную оплату вступительных, членских, паевых и иных взносов в размере <strong class="editable-field" data-key="q10-peni">0,2% от суммы задолженности за каждый день просрочки платежа</strong>, но не более суммы долга. Денежные средства, взысканные в качестве пени за нарушение обязанности по внесению вступительных, членских, паевых и иных взносов в соответствии с настоящим пунктом, подлежат зачислению в фонд кооператива, в который должны поступать соответствующие взносы[cite: 1, 2].
+              Утвердить с 01.11.2026 года пени за несвоевременную оплату вступительных, членских, паевых и иных взносов в размере <strong class="editable-field" data-key="q10-peni">0,2% от суммы задолженности за каждый день просрочки платежа</strong>, но не более суммы долга. Денежные средства, взысканные в качестве пени за нарушение обязанности по внесению вступительных, членских, паевых и иных взносов в соответствии с настоящим пунктом, подлежат зачислению в фонд кооператива, в который должны поступать соответствующие взносы.
             </td>
             <td class="col-opt"><label><input type="radio" name="q10" value="for" required> За</label></td>
             <td class="col-opt"><label><input type="radio" name="q10" value="against"> Против</label></td>
@@ -612,14 +600,13 @@
     </div>
 
     <div class="footer-section">
-      Адрес Счётной комиссии ГСК «Ручеёк»: <span class="editable-field" data-key="footer-address">Московская область, город Домодедово, улица Шевченко, 10, территория ГСК «Ручеёк», помещение Правления ГСК</span>[cite: 1, 2].
+      Адрес Счётной комиссии ГСК «Ручеёк»: <span class="editable-field" data-key="footer-address">Московская область, город Домодедово, улица Шевченко, 10, территория ГСК «Ручеёк», помещение Правления ГСК</span>.
     </div>
 
     <button type="submit" id="submitBtn" class="submit-btn">Отправить решение (бюллетень)</button>
   </form>
 </div>
 
-<!-- Модальное окно авторизации администратора -->
 <div id="adminModal" class="modal-overlay">
   <div class="modal-box">
     <h3>Авторизация администратора</h3>
@@ -639,7 +626,6 @@
 
   let isAdmin = false;
 
-  // 1. Загрузка сохранённых изменений текста админом
   function loadSavedContent() {
     const saved = localStorage.getItem(STORAGE_KEY_CONTENT);
     if (!saved) return;
@@ -656,7 +642,6 @@
     }
   }
 
-  // 2. Включение / отключение режима редактирования
   function setAdminMode(active) {
     isAdmin = active;
     const adminPanel = document.getElementById('adminPanel');
@@ -677,7 +662,6 @@
     }
   }
 
-  // 3. Сохранение изменений в localStorage
   document.getElementById('saveEditsBtn').addEventListener('click', () => {
     const data = {};
     document.querySelectorAll('.editable-field').forEach(el => {
@@ -688,7 +672,6 @@
     alert('Все изменения формулировок и фамилий успешно сохранены!');
   });
 
-  // 4. Сброс метки голосования (для тестов)
   document.getElementById('resetVoteBtn').addEventListener('click', () => {
     if (confirm('Сбросить отметку о факте голосования на данном устройстве?')) {
       localStorage.removeItem(STORAGE_KEY_VOTED);
@@ -697,7 +680,6 @@
     }
   });
 
-  // 5. Обработка окна авторизации
   const adminModal = document.getElementById('adminModal');
   const passwordInput = document.getElementById('adminPasswordInput');
 
@@ -733,7 +715,6 @@
     setAdminMode(false);
   });
 
-  // 6. Ограничение повторного голосования с устройства
   function generateDeviceFingerprint() {
     let savedToken = localStorage.getItem(STORAGE_KEY_DEVICE);
     if (savedToken) return savedToken;
@@ -771,7 +752,6 @@
     alertBox.style.display = 'block';
   }
 
-  // 7. Инициализация при загрузке страницы
   document.addEventListener('DOMContentLoaded', () => {
     loadSavedContent();
 
@@ -789,7 +769,6 @@
     }
   });
 
-  // 8. Отправка голоса
   document.getElementById('voteForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
