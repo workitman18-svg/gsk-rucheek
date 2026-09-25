@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лист голосования члена ГСК «Ручеёк»</title>
+  <style>
+    :root {
+      --primary-color: #1e3a8a;
+      --border-color: #cbd5e1;
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --accent: #2563eb;
+      --success-bg: #ecfdf5;
+      --success-border: #10b981;
+      --success-text: #065f46;
+      --warning-bg: #fffbeb;
+      --warning-border: #f59e0b;
+      --warning-text: #92400e;
+      --admin-bg: #fef2f2;
+      --admin-border: #ef4444;
+      --admin-text: #991b1b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 24px 12px;
+      line-height: 1.5;
+    }
+
+    /* Верхняя панель навигации / входа */
+    .top-bar {
+      max-width: 960px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-admin-login {
+      background: #334155;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-admin-login:hover { background: #1e293b; }
+
+    /* Панель инструментов админа */
+    .admin-panel {
+      display: none;
+      max-width: 960px;
+      margin: 0 auto 16px auto;
+      background: #f8fafc;
+      border: 2px dashed #3b82f6;
+      border-radius: 8px;
+      padding: 16px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .admin-panel.active { display: flex; }
+
+    .admin-status {
+      font-weight: 700;
+      color: #1e40af;
+      font-size: 14px;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-admin-action {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn-save-content { background: #10b981; color: white; }
+    .btn-save-content:hover { background: #059669; }
+
+    .btn-reset-vote { background: #f59e0b; color: white; }
+    .btn-reset-vote:hover { background: #d97706; }
+
+    .btn-admin-logout { background: #ef4444; color: white; }
+    .btn-admin-logout:hover { background: #dc2626; }
+
+    /* Визуальное выделение редактируемых полей */
+    .editable-field.edit-active {
+      outline: 2px dashed #3b82f6;
+      background-color: #eff6ff;
+      border-radius: 4px;
+      padding: 2px 4px;
+      transition: background 0.2s;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      padding: 32px 24px;
+    }
+
+    .doc-header {
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+
+    .doc-header h1 {
+      font-size: 22px;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-info {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-align: justify;
+    }
+
+    .meta-highlight {
+      background: #eff6ff;
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 14px 0;
+      font-size: 13.5px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .status-alert {
+      display: none;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .status-alert.already-voted {
+      background-color: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning-text);
+    }
+
+    .status-alert.success {
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+    }
+
+    .user-info-section {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .form-group { margin-bottom: 12px; }
+
+    .form-group label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .form-group input:disabled {
+      background: #f1f5f9;
+      cursor: not-allowed;
+      color: #94a3b8;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    table.vote-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    table.vote-table th, 
+    table.vote-table td {
+      border: 1px solid var(--border-color);
+      padding: 12px 10px;
+      vertical-align: middle;
+    }
+
+    table.vote-table th {
+      background-color: #f1f5f9;
+      color: var(--text-main);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .col-num { width: 5%; text-align: center; }
+    .col-title { width: 65%; }
+    .col-opt { width: 10%; text-align: center; }
+
+    .col-opt label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .col-opt input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary-color);
+    }
+
+    .col-opt input[type="radio"]:disabled {
+      cursor: not-allowed;
+    }
+
+    tr:hover { background-color: #fafafa; }
+
+    .sub-list {
+      margin: 8px 0 0 16px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .footer-section {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--primary-color);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .submit-btn:hover { background: #1d4ed8; }
+
+    .submit-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    /* Модальное окно авторизации */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .modal-box h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .modal-box input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-modal-cancel {
+      padding: 8px 14px;
+      background: #e2e8f0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-modal-submit {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Кнопка вызова админ-панели -->
+<div class="top-bar">
+  <button id="adminLoginBtn" class="btn-admin-login">
+    ⚙ Вход для администратора
+  </button>
+</div>
+
+<!-- Панель управления администратора -->
+<div id="adminPanel" class="admin-panel">
+  <div class="admin-status">Режим администратора активен: кликните на текст для редактирования</div>
+  <div class="admin-actions">
+    <button id="saveEditsBtn" class="btn-admin-action btn-save-content">Сохранить изменения</button>
+    <button id="resetVoteBtn" class="btn-admin-action btn-reset-vote">Сбросить отметку голосования</button>
+    <button id="adminLogoutBtn" class="btn-admin-action btn-admin-logout">Выйти</button>
+  </div>
+</div>
+
+<div class="container">
+  <header class="doc-header">
+    <h1>Лист голосования</h1>
+    <p class="meta-info" style="text-align: center; font-weight: 600;">
+      РЕШЕНИЕ члена гаражно-строительного кооператива «Ручеёк»[cite: 1, 2]
+    </p>
+    <p class="meta-info">
+      для голосования по вопросам повестки очередного Общего собрания членов гаражно-строительного кооператива «Ручеёк», расположенного по адресу: 
+      <strong class="editable-field" data-key="header-address">Московская область, город Домодедово, улица Шевченко, 10</strong>[cite: 1, 2].
+    </p>
+    <p class="meta-info">
+      <strong>Инициаторы собрания:</strong> Председатель Правления ГСК «Ручеёк» 
+      <span class="editable-field" data-key="header-initiator">Боговик Егор Васильевич</span>[cite: 1, 2].
+    </p>
+    
+    <div class="meta-highlight">
+      • <strong>Очное собрание:</strong> в 10:00 часов по адресу: <span class="editable-field" data-key="header-meeting-place">Московская область, г. Домодедово, ул. Шевченко, 10, территория ГСК «Ручеёк»</span>[cite: 1, 2].<br>
+      • <strong>Заочное голосование:</strong> с использованием интернет-ресурсов[cite: 1, 2]. Повторное голосование с одного устройства заблокировано.
+    </div>
+
+    <p style="font-size: 13px; color: var(--text-muted); font-style: italic;">
+      Нужный вариант ответа отметьте в одной из граф («ЗА», «ПРОТИВ», «ВОЗДЕРЖАЛСЯ») по каждому вопросу[cite: 1, 2].
+    </p>
+  </header>
+
+  <!-- Уведомления об ограничении -->
+  <div id="alreadyVotedAlert" class="status-alert already-voted">
+    <strong>Голосование с данного устройства уже завершено.</strong><br>
+    <span id="voteDateNotice"></span> Повторная подача бюллетеня не допускается.
+  </div>
+
+  <div id="successAlert" class="status-alert success">
+    <strong>Ваш голос успешно принят и сохранён!</strong> Спасибо за участие в общем собрании ГСК «Ручеёк».
+  </div>
+
+  <form id="voteForm">
+    <input type="hidden" id="deviceId" name="deviceId" value="">
+
+    <!-- Сведения об участнике -->
+    <div class="user-info-section">
+      <div class="section-title">Сведения о члене ГСК «Ручеёк»[cite: 1, 2]</div>
+      <div class="form-group">
+        <label for="fio">Фамилия, имя, отчество члена ГСК *[cite: 1, 2]</label>
+        <input type="text" id="fio" name="fio" placeholder="Например: Иванов Иван Иванович" required>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="garage_num">№ гаража (бокса/места) *[cite: 1, 2]</label>
+          <input type="text" id="garage_num" name="garage_num" placeholder="Например: 42" required>
+        </div>
+        <div class="form-group">
+          <label for="vote_count">Количество голосов *[cite: 1, 2]</label>
+          <input type="number" id="vote_count" name="vote_count" value="1" min="1" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Контактный телефон *[cite: 1, 2]</label>
+        <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+      </div>
+    </div>
+
+    <!-- Таблица повестки дня со всеми 10 пунктами -->
+    <div class="table-responsive">
+      <table class="vote-table">
+        <thead>
+          <tr>
+            <th class="col-num">№ п/п[cite: 1, 2]</th>
+            <th class="col-title">По повестке Общего собрания[cite: 1, 2]</th>
+            <th class="col-opt">ЗА[cite: 1, 2]</th>
+            <th class="col-opt">ПРОТИВ[cite: 1, 2]</th>
+            <th class="col-opt">ВОЗДЕРЖАЛСЯ[cite: 1, 2]</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Вопрос 1 -->
+          <tr>
+            <td class="col-num">1</td>
+            <td class="col-title">
+              В целях обеспечения проведения Общего собрания согласно Устава ГСК «Ручеёк» от 27.06.2012 года предлагается избрать[cite: 1, 2]:
+              <ul class="sub-list">
+                <li><strong>Председателем Общего собрания:</strong> <span class="editable-field" data-key="q1-pres">Боговика Егора Васильевича</span>[cite: 1, 2]</li>
+                <li><strong>Секретарём Общего собрания:</strong> <span class="editable-field" data-key="q1-sec">Сергеева Николая Сергеевича</span>[cite: 1, 2]</li>
+                <li><strong>Членами счетной комиссии Общего собрания:</strong>[cite: 1, 2]
+                  1) <span class="editable-field" data-key="q1-sc1">Акчурина Марата Дамировича</span>, 
+                  2) <span class="editable-field" data-key="q1-sc2">Турчанинову Татьяну Александровну</span>[cite: 1, 2]
+                </li>
+              </ul>
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q1" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q1" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q1" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 2 -->
+          <tr>
+            <td class="col-num">2</td>
+            <td class="col-title">
+              Избрать членами Ревизионной комиссии ГСК «Ручеёк» с 01.12.2026 со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года[cite: 1, 2]:
+              <ul class="sub-list">
+                <li><strong>Председателем Ревизионной комиссии ГСК «Ручеёк»:</strong> <span class="editable-field" data-key="q2-rev-chair">Акчурина Марата Дамировича</span>[cite: 1, 2]</li>
+                <li><strong>Членами Ревизионной комиссии ГСК «Ручеёк»:</strong> <span class="editable-field" data-key="q2-rev-m1">Турчанинову Татьяну Александровну</span>, <span class="editable-field" data-key="q2-rev-m2">Юмагулова Руслана Дамировича</span>[cite: 1, 2]</li>
+              </ul>
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q2" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q2" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q2" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 3 -->
+          <tr>
+            <td class="col-num">3</td>
+            <td class="col-title">
+              Признать работу Председателя Правления ГСК «Ручеёк» <span class="editable-field" data-key="q3-chairman">Боговика Егора Васильевича</span> удовлетворительной и освободить от полномочий Председателя Правления ГСК «Ручеёк» с 01.12.2026 г.[cite: 1, 2]
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q3" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q3" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q3" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 4 -->
+          <tr>
+            <td class="col-num">4</td>
+            <td class="col-title">
+              Избрать <span class="editable-field" data-key="q4-new-chair">Иванова Ивана Ивановича</span> Председателем Правления ГСК «Ручеёк» с 01.12.2026 г. со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года[cite: 1, 2].
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q4" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q4" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q4" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 5 -->
+          <tr>
+            <td class="col-num">5</td>
+            <td class="col-title">
+              Избрать членами Правления ГСК «Ручеёк» с 01.12.2026 г. со сроком полномочий на три года в соответствии с Уставом ГСК «Ручеёк» от 27.06.2012 года в следующем составе[cite: 1, 2]:
+              <ol class="sub-list">
+                <li><span class="editable-field" data-key="q5-m1">Анпилогова Владимира Сергеевича</span>[cite: 1, 2]</li>
+                <li><span class="editable-field" data-key="q5-m2">Масляева Юрия Николаевича</span>[cite: 1, 2]</li>
+                <li><span class="editable-field" data-key="q5-m3">Матяшова Владимира Павловича</span>[cite: 1, 2]</li>
+                <li><span class="editable-field" data-key="q5-m4">Мохнаткина Валерия Борисовича</span>[cite: 1, 2]</li>
+                <li><span class="editable-field" data-key="q5-m5">Сергеева Николая Сергеевича</span>[cite: 1, 2]</li>
+                <li><span class="editable-field" data-key="q5-m6">Смирнова Евгения Егоровича</span>[cite: 1, 2]</li>
+              </ol>
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q5" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q5" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q5" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 6 -->
+          <tr>
+            <td class="col-num">6</td>
+            <td class="col-title">
+              Утвердить сумму годового членского взноса в ГСК «Ручеёк» на период 2027 года в размере <strong class="editable-field" data-key="q6-sum">6000 рублей</strong> и сроком уплаты взноса до <span class="editable-field" data-key="q6-date">01.05.2027 г.</span>[cite: 1, 2]
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q6" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q6" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q6" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 7 -->
+          <tr>
+            <td class="col-num">7</td>
+            <td class="col-title">
+              Утвердить сумму вступительного членского взноса в ГСК «Ручеёк» на период 2027 года в размере <strong class="editable-field" data-key="q7-sum">10000 рублей</strong> с 01.01.2027 года и сроком уплаты не более 3-х дней с момента переоформления гаража путем совершения сделки по купле-продаже[cite: 1, 2].
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q7" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q7" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q7" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 8 -->
+          <tr>
+            <td class="col-num">8</td>
+            <td class="col-title">
+              Утвердить сумму целевого взноса для гаражей, которые используются для ведения коммерческой деятельности, в размере <strong class="editable-field" data-key="q8-sum">от 10000 до 20000 рублей</strong> на период 2027 года и сроком уплаты взноса до 01.03.2027 г. Размер взноса определять в индивидуальном порядке решением специальной комиссии из состава Правления ГСК[cite: 1, 2].
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q8" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q8" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q8" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 9 -->
+          <tr>
+            <td class="col-num">9</td>
+            <td class="col-title">
+              Утвердить списочный состав членов ГСК «Ручеёк» по состоянию на <span class="editable-field" data-key="q9-date">01.11.2026 года</span> (с учётом принятия и исключения из состава членов ГСК «Ручеёк» лиц в период с 13.03.2023 по 01.11.2026 г.)[cite: 1, 2].
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q9" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q9" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q9" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+          <!-- Вопрос 10 -->
+          <tr>
+            <td class="col-num">10</td>
+            <td class="col-title">
+              Утвердить с 01.11.2026 года пени за несвоевременную оплату вступительных, членских, паевых и иных взносов в размере <strong class="editable-field" data-key="q10-peni">0,2% от суммы задолженности за каждый день просрочки платежа</strong>, но не более суммы долга. Денежные средства, взысканные в качестве пени за нарушение обязанности по внесению вступительных, членских, паевых и иных взносов в соответствии с настоящим пунктом, подлежат зачислению в фонд кооператива, в который должны поступать соответствующие взносы[cite: 1, 2].
+            </td>
+            <td class="col-opt"><label><input type="radio" name="q10" value="for" required> За</label></td>
+            <td class="col-opt"><label><input type="radio" name="q10" value="against"> Против</label></td>
+            <td class="col-opt"><label><input type="radio" name="q10" value="abstain"> Воздерж.</label></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-section">
+      Адрес Счётной комиссии ГСК «Ручеёк»: <span class="editable-field" data-key="footer-address">Московская область, город Домодедово, улица Шевченко, 10, территория ГСК «Ручеёк», помещение Правления ГСК</span>[cite: 1, 2].
+    </div>
+
+    <button type="submit" id="submitBtn" class="submit-btn">Отправить решение (бюллетень)</button>
+  </form>
+</div>
+
+<!-- Модальное окно авторизации администратора -->
+<div id="adminModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3>Авторизация администратора</h3>
+    <input type="password" id="adminPasswordInput" placeholder="Введите пароль..." autocomplete="off">
+    <div class="modal-buttons">
+      <button id="cancelModalBtn" class="btn-modal-cancel">Отмена</button>
+      <button id="submitPasswordBtn" class="btn-modal-submit">Войти</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ADMIN_PASSWORD = 'Garaji_Viraji_69';
+  const STORAGE_KEY_VOTED = 'gsk_rucheek_voted_2026';
+  const STORAGE_KEY_DEVICE = 'gsk_rucheek_device_token';
+  const STORAGE_KEY_CONTENT = 'gsk_rucheek_custom_content';
+
+  let isAdmin = false;
+
+  // 1. Загрузка сохранённых изменений текста админом
+  function loadSavedContent() {
+    const saved = localStorage.getItem(STORAGE_KEY_CONTENT);
+    if (!saved) return;
+    try {
+      const data = JSON.parse(saved);
+      document.querySelectorAll('.editable-field').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (data[key] !== undefined) {
+          el.innerText = data[key];
+        }
+      });
+    } catch (e) {
+      console.error('Ошибка загрузки сохранённого контента:', e);
+    }
+  }
+
+  // 2. Включение / отключение режима редактирования
+  function setAdminMode(active) {
+    isAdmin = active;
+    const adminPanel = document.getElementById('adminPanel');
+    const editableElements = document.querySelectorAll('.editable-field');
+
+    if (active) {
+      adminPanel.classList.add('active');
+      editableElements.forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+        el.classList.add('edit-active');
+      });
+    } else {
+      adminPanel.classList.remove('active');
+      editableElements.forEach(el => {
+        el.removeAttribute('contenteditable');
+        el.classList.remove('edit-active');
+      });
+    }
+  }
+
+  // 3. Сохранение изменений в localStorage
+  document.getElementById('saveEditsBtn').addEventListener('click', () => {
+    const data = {};
+    document.querySelectorAll('.editable-field').forEach(el => {
+      const key = el.getAttribute('data-key');
+      data[key] = el.innerText.trim();
+    });
+    localStorage.setItem(STORAGE_KEY_CONTENT, JSON.stringify(data));
+    alert('Все изменения формулировок и фамилий успешно сохранены!');
+  });
+
+  // 4. Сброс метки голосования (для тестов)
+  document.getElementById('resetVoteBtn').addEventListener('click', () => {
+    if (confirm('Сбросить отметку о факте голосования на данном устройстве?')) {
+      localStorage.removeItem(STORAGE_KEY_VOTED);
+      alert('Отметка снята. Страница будет перезагружена.');
+      location.reload();
+    }
+  });
+
+  // 5. Обработка окна авторизации
+  const adminModal = document.getElementById('adminModal');
+  const passwordInput = document.getElementById('adminPasswordInput');
+
+  document.getElementById('adminLoginBtn').addEventListener('click', () => {
+    passwordInput.value = '';
+    adminModal.classList.add('active');
+    passwordInput.focus();
+  });
+
+  document.getElementById('cancelModalBtn').addEventListener('click', () => {
+    adminModal.classList.remove('active');
+  });
+
+  document.getElementById('submitPasswordBtn').addEventListener('click', () => {
+    if (passwordInput.value === ADMIN_PASSWORD) {
+      adminModal.classList.remove('active');
+      setAdminMode(true);
+      alert('Доступ разрешен. Теперь вы можете кликнуть на любую фамилию, дату или сумму и отредактировать её.');
+    } else {
+      alert('Неверный пароль!');
+      passwordInput.value = '';
+      passwordInput.focus();
+    }
+  });
+
+  passwordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      document.getElementById('submitPasswordBtn').click();
+    }
+  });
+
+  document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+    setAdminMode(false);
+  });
+
+  // 6. Ограничение повторного голосования с устройства
+  function generateDeviceFingerprint() {
+    let savedToken = localStorage.getItem(STORAGE_KEY_DEVICE);
+    if (savedToken) return savedToken;
+
+    const screenData = `${screen.width}x${screen.height}x${screen.colorDepth}`;
+    const userAgent = navigator.userAgent;
+    const lang = navigator.language || navigator.userLanguage;
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const rawString = `${screenData}_${userAgent}_${lang}_${timeZone}_${Math.random()}`;
+
+    let hash = 0;
+    for (let i = 0; i < rawString.length; i++) {
+      hash = (hash << 5) - hash + rawString.charCodeAt(i);
+      hash |= 0;
+    }
+    const token = 'DEV_' + Math.abs(hash).toString(36) + '_' + Date.now().toString(36);
+    localStorage.setItem(STORAGE_KEY_DEVICE, token);
+    return token;
+  }
+
+  function lockForm(votedAt, garageNum) {
+    const form = document.getElementById('voteForm');
+    const inputs = form.querySelectorAll('input');
+    const btn = document.getElementById('submitBtn');
+    const alertBox = document.getElementById('alreadyVotedAlert');
+    const notice = document.getElementById('voteDateNotice');
+
+    inputs.forEach(input => input.disabled = true);
+    btn.disabled = true;
+    btn.innerText = 'Голос уже принят';
+
+    if (votedAt) {
+      notice.innerText = `Бюллетень по гаражу №${garageNum || '—'} был принят ${new Date(votedAt).toLocaleString('ru-RU')}.`;
+    }
+    alertBox.style.display = 'block';
+  }
+
+  // 7. Инициализация при загрузке страницы
+  document.addEventListener('DOMContentLoaded', () => {
+    loadSavedContent();
+
+    const deviceId = generateDeviceFingerprint();
+    document.getElementById('deviceId').value = deviceId;
+
+    const votedDataRaw = localStorage.getItem(STORAGE_KEY_VOTED);
+    if (votedDataRaw) {
+      try {
+        const data = JSON.parse(votedDataRaw);
+        lockForm(data.timestamp, data.garage);
+      } catch (e) {
+        lockForm();
+      }
+    }
+  });
+
+  // 8. Отправка голоса
+  document.getElementById('voteForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (localStorage.getItem(STORAGE_KEY_VOTED)) {
+      alert('С данного устройства голос уже был отправлен ранее.');
+      return;
+    }
+
+    const garageNum = document.getElementById('garage_num').value.trim();
+    const deviceId = document.getElementById('deviceId').value;
+
+    const votePayload = {
+      timestamp: new Date().toISOString(),
+      garage: garageNum,
+      deviceId: deviceId
+    };
+
+    localStorage.setItem(STORAGE_KEY_VOTED, JSON.stringify(votePayload));
+
+    document.getElementById('successAlert').style.display = 'block';
+    lockForm(votePayload.timestamp, votePayload.garage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
